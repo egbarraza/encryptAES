@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encrypt Password with AES</title>
+    <title>Encrypt and Decrypt Password with AES</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         body {
@@ -21,6 +21,7 @@
             border: 1px solid #ddd;
             border-radius: 10px;
             background: #f9f9f9;
+            margin-bottom: 20px;
         }
         label {
             display: block;
@@ -45,7 +46,9 @@
     </style>
 </head>
 <body>
-    <h1>Encrypt Password with AES</h1>
+    <h1>Encrypt and Decrypt Password with AES</h1>
+
+    <!-- Encryption Form -->
     <form id="encryptionForm">
         <label for="aesKey">Enter AES Key:</label>
         <input type="text" id="aesKey" placeholder="Enter AES key" required>
@@ -59,7 +62,22 @@
     <h2>Encrypted Password:</h2>
     <p id="encryptedOutput" style="word-wrap: break-word;"></p>
 
+    <!-- Decryption Form -->
+    <form id="decryptionForm">
+        <label for="aesKeyDecrypt">Enter AES Key for Decryption:</label>
+        <input type="text" id="aesKeyDecrypt" placeholder="Enter AES key" required>
+        
+        <label for="encryptedText">Enter Encrypted Text:</label>
+        <input type="text" id="encryptedText" placeholder="Enter encrypted text" required>
+        
+        <button type="submit">Decrypt Password</button>
+    </form>
+
+    <h2>Decrypted Password:</h2>
+    <p id="decryptedOutput" style="word-wrap: break-word;"></p>
+
     <script>
+        // Encryption Logic
         document.getElementById('encryptionForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent form submission
             
@@ -81,6 +99,37 @@
             } catch (error) {
                 console.error('Encryption error:', error);
                 alert('Error encrypting the password. Please try again.');
+            }
+        });
+
+        // Decryption Logic
+        document.getElementById('decryptionForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            // Get values from input fields
+            const aesKey = document.getElementById('aesKeyDecrypt').value.trim();
+            const encryptedText = document.getElementById('encryptedText').value.trim();
+
+            if (!aesKey || !encryptedText) {
+                alert('Please enter both AES key and encrypted text.');
+                return;
+            }
+
+            // Decrypt the encrypted text using AES
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedText, aesKey);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if (!decrypted) {
+                    alert('Decryption failed. Please check the AES key and encrypted text.');
+                    return;
+                }
+
+                // Display the decrypted password
+                document.getElementById('decryptedOutput').innerText = decrypted;
+            } catch (error) {
+                console.error('Decryption error:', error);
+                alert('Error decrypting the password. Please try again.');
             }
         });
     </script>
