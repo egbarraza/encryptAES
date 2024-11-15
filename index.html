@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt Password with AES</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        form {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Encrypt Password with AES</h1>
+    <form id="encryptionForm">
+        <label for="aesKey">Enter AES Key:</label>
+        <input type="text" id="aesKey" placeholder="Enter AES key" required>
+        
+        <label for="password">Enter Password:</label>
+        <input type="text" id="password" placeholder="Enter password" required>
+        
+        <button type="submit">Encrypt Password</button>
+    </form>
+
+    <h2>Encrypted Password:</h2>
+    <p id="encryptedOutput" style="word-wrap: break-word;"></p>
+
+    <script>
+        document.getElementById('encryptionForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            // Get values from input fields
+            const aesKey = document.getElementById('aesKey').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!aesKey || !password) {
+                alert('Please enter both AES key and password.');
+                return;
+            }
+
+            // Encrypt the password using AES
+            try {
+                const encrypted = CryptoJS.AES.encrypt(password, aesKey).toString();
+                
+                // Display the encrypted password
+                document.getElementById('encryptedOutput').innerText = encrypted;
+            } catch (error) {
+                console.error('Encryption error:', error);
+                alert('Error encrypting the password. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
